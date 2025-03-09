@@ -1,0 +1,49 @@
+﻿<h1>Welcome In First View</h1>
+<!--C# HTML-->
+<style>
+    h1{
+        color:red;
+        background-color:yellow;
+    }
+</style>
+<script>
+    console.log("Hello")
+</script>
+<!--Razor Enging Server Side Code-->
+<!--Block of Code C#-->
+@{
+    int x = 10;
+    int y = x+10;
+    int z = x + y;
+    <h2>@y</h2>
+}
+<!--Inline Code dispkay-->
+@(x+y)
+<h1>@x</h1>
+
+<!--Condition Stament-->
+@if (x > y)
+{
+    <h2>X Greate Y</h2>   
+}else{
+    <h2>X = @x Less Y =@y</h2>
+}
+
+<!--looping -->
+<ul>
+@for(int i = 0; i < 10; i++)
+{
+    <li>@i</li>
+}
+</ul>
+
+
+
+
+
+
+
+
+
+
+
