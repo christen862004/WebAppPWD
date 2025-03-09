@@ -5,6 +5,8 @@ namespace WebAppPWD.Controllers
 {
     public class StudentController : Controller
     {
+
+
         StudentBL StudentBL=new StudentBL();
         //Student/all
         public IActionResult All()
