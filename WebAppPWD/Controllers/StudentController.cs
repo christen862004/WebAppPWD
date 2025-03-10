@@ -5,16 +5,16 @@ namespace WebAppPWD.Controllers
 {
     public class StudentController : Controller
     {
-
-
         StudentBL StudentBL=new StudentBL();
         //Student/all
         public IActionResult All()
         {
             List<Student> stdListModel =StudentBL.GetAll();
             //send view
-            return View("ShowAll",stdListModel);
+            return View("ShowAll",stdListModel);//send
             //view ShowAll ,Model with Type "List<Student>"
         }
+
+
     }
 }

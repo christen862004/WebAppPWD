@@ -1,0 +1,16 @@
+﻿@model EmployeeWurhMsgTempBrchListClrViewModel
+@{
+    ViewData["Title"] = "DetailsWithVM";
+}
+
+<h1>DetailsWithVM</h1>
+@Model.EmpID
+@(Model.Temp+10)
+<select class="form form-control">
+    @foreach (var item in Model.Branches)
+    {
+        <option>@item</option>
+    }
+</select>
+
+

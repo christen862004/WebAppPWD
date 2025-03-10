@@ -1,0 +1,52 @@
+﻿@model Employee
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+<h2 style="color:@ViewData["CLR"]">@Model.Name</h2>
+<hr />
+Msg : @ViewData["msg"] <br />
+Temp : @(int.Parse(ViewData["Temp"].ToString())-10) <br />
+
+
+<select class="form form-control">
+    @foreach (var item in (List<string>)ViewData["Brch"])
+    {
+        <option>@item</option>
+    }
+</select>
+
+<h3>@ViewData["Age"]</h3>
+<hr />
+@ViewBag.msg
+@(ViewBag.Temp+10)
+
+<select class="form form-control">
+    @foreach (var item in ViewBag.Brch)
+    {
+        <option>@item</option>
+    }
+</select>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--ViewData Problem
+    1) Magic String 
+    2) Type Casting (unBoxing)
+-->
