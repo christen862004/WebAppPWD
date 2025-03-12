@@ -14,6 +14,35 @@ namespace WebAppPWD.Controllers
             List<Employee> empsList = context.Employees.ToList();
             return View("Index", empsList);//Model List<Employee>
         }
+        #region Add
+        public IActionResult New()
+        {
+            ViewData["deptList"] = context.Departments.ToList();
+            return View("New");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]//check token internal request (int ,register)
+        //handl only internal requet
+        public IActionResult SaveNew(Employee empFromRequest) {
+            if (empFromRequest.Name != null &&empFromRequest.DepartmentId!=0)
+            {
+                context.Employees.Add(empFromRequest);
+                context.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            //return View();//View With the same name of action ,Model Null
+            //return View("New");//go To View with name "NEw"  Model null
+            //return View(empFromRequest);//view = action name ,Model =Employee
+            ViewData["deptList"] = context.Departments.ToList();
+            return View("New", empFromRequest);//go To View with name "NEw"  Model with type Employee
+
+        }
+
+
+        #endregion
+
+
         #region Edit
         public IActionResult Edit(int id)
         {
@@ -34,7 +63,8 @@ namespace WebAppPWD.Controllers
             empVM.DepartmentId = EmpModel.DepartmentId;
             empVM.DepartmentList = DeptList;
 
-            return View("Edit", empVM);//Model Null ,VM
+            //return View("Edit", empVM);//Model Null ,VM
+            return View(empVM);//Model Null ,VM
         }
         [HttpPost]
         public IActionResult SaveEdit(EmpWithDEptListViewModel empFromReq)
@@ -63,7 +93,7 @@ namespace WebAppPWD.Controllers
 
 
         #region Details
-        public IActionResult Details(int id)
+        public IActionResult Details(int id,string name)
         {
             string msg = "Hello";
             int temp = 28;

@@ -3,24 +3,64 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
-<!--//Employee/saveEdit/1
-[name]
-[address]
-[salary]s
-[departmentId]
+<a href="/Employee/Index">Back To List</a><br />
+<a href="/Employee/details?id=@Model.Id">Details</a>
+<a href="/Employee/details/@Model.Id">DEtails</a>
+
+<hr />
+@Html.ActionLink("Back To List","Index","Employee")<br />
+@Html.ActionLink("DEtails Text","Details","Employee",new{id=Model.Id,name=Model.Name})<br />
+
+<hr />
+<a asp-action="Details" asp-controller="Employee"
+asp-route-id="@Model.Id" asp-route-name="@Model.Name">Details</a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--relative Domain
+http://localhost:26282/Employee/Edit/1
+browser
+http://localhost:26282/Employee/Index
 -->
+
+<h1>Edit</h1>
+
 <form method="post" action="/Employee/saveEdit/@Model.Id">
     @* <input type="hidden" value="@Model.Id" name="Id"/> *@
+    <div>
+        <!--Pure HTML
+        <label>Address</label>
+        <input class="form form-control" id="Address" name="Address" value="@Model.Address" type="text" />
+
+        @* @Html.TextBox("Address", null, new { style = "color:red",@class="form form-control"}) *@
+        @* @Html.TextBoxFor(e => e.Address, new { style = "color:red", @class = "form form-control" }) *@
+        -->
+        <!--HTML Helper-->
+       @*  @Html.LabelFor(e=>e.Address)
+        @Html.EditorFor(e=>e.Address) *@
+
+
+        <!--Tag Hlepr-->
+        <label asp-for="Address"></label>
+        <input class="form form-control" asp-for="Address"/>
+    </div>
 
     <div>
         <label>Name</label>
         <input class="form form-control" id="Name" name="Name" value="@Model.Name" type="text"/>
     </div>
-    <div>
-        <label>Address</label>
-        <input class="form form-control" id="Address" name="Address" value="@Model.Address" type="text" />
-    </div>
+   
     <div>
         <label>JobTitle</label>
         <input class="form form-control" id="JobTitle" name="JobTitle" value="@Model.JobTitle" type="text"/>
@@ -49,22 +89,8 @@
             }
         </select>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
     <input type="submit" value="Save" class="btn btn-success" />
 
 </form>
 
 
-<a href="/Employee/Index">Back To List</a>
