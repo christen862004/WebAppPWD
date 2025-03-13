@@ -14,6 +14,23 @@ namespace WebAppPWD.Controllers
             List<Employee> empsList = context.Employees.ToList();
             return View("Index", empsList);//Model List<Employee>
         }
+
+        //Employee/CheckSalary?Salary=50000&DepartmentId=10
+        public IActionResult CheckSalary(int Salary, int DepartmentId)
+       {
+            if (DepartmentId == 1)
+            {
+                if (Salary > 6000)
+                    return Json(true);
+            }else if (DepartmentId == 2)
+            {
+                if (Salary > 10000)
+                    return Json(true);
+            } 
+        
+            return Json(false);
+        }
+
         #region Add
         public IActionResult New()
         {
@@ -25,15 +42,22 @@ namespace WebAppPWD.Controllers
         [ValidateAntiForgeryToken]//check token internal request (int ,register)
         //handl only internal requet
         public IActionResult SaveNew(Employee empFromRequest) {
-            if (empFromRequest.Name != null &&empFromRequest.DepartmentId!=0)
+           
+            if(ModelState.IsValid==true)
             {
-                context.Employees.Add(empFromRequest);
-                context.SaveChanges();
-                return RedirectToAction("Index");
+                try
+                {
+                    context.Employees.Add(empFromRequest);
+                    context.SaveChanges();
+                    return RedirectToAction("Index");
+                }catch(Exception ex)
+                {
+                    //send exceptio as erro r view
+                    //ModelState.AddModelError("DepartmentId",ex.InnerException.Message);
+                    ModelState.AddModelError(string.Empty,ex.InnerException.Message);
+                }
             }
-            //return View();//View With the same name of action ,Model Null
-            //return View("New");//go To View with name "NEw"  Model null
-            //return View(empFromRequest);//view = action name ,Model =Employee
+           
             ViewData["deptList"] = context.Departments.ToList();
             return View("New", empFromRequest);//go To View with name "NEw"  Model with type Employee
 
