@@ -11,6 +11,7 @@ namespace WebAppPWD.Controllers
 
         public IActionResult Index()
         {
+            
             List<Employee> empsList = context.Employees.ToList();
             return View("Index", empsList);//Model List<Employee>
         }
@@ -18,6 +19,7 @@ namespace WebAppPWD.Controllers
         //Employee/CheckSalary?Salary=50000&DepartmentId=10
         public IActionResult CheckSalary(int Salary, int DepartmentId)
        {
+            
             if (DepartmentId == 1)
             {
                 if (Salary > 6000)

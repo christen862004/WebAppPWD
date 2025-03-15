@@ -14,6 +14,7 @@ namespace WebAppPWD.Controllers
         }
         public IActionResult Index()//not numerl function
         {
+            
             List<Department> departmentList = context.Departments.ToList();
             return View("Index",departmentList);//Index ,Model List<department>
         }
