@@ -11,10 +11,22 @@ namespace WebAppPWD.Controllers
 
         public IActionResult Index()
         {
-            
             List<Employee> empsList = context.Employees.ToList();
             return View("Index", empsList);//Model List<Employee>
         }
+
+        #region action return Partial
+
+        //Employee/GetEmpCard/1
+        public IActionResult GetEmpCard(int id)
+        {
+            Employee emp = context.Employees.FirstOrDefault(e => e.Id == id);
+            return PartialView("_EmpCard",emp);//Model null
+        }
+
+
+        #endregion
+
 
         //Employee/CheckSalary?Salary=50000&DepartmentId=10
         public IActionResult CheckSalary(int Salary, int DepartmentId)
@@ -68,7 +80,6 @@ namespace WebAppPWD.Controllers
 
         #endregion
 
-
         #region Edit
         public IActionResult Edit(int id)
         {
@@ -117,7 +128,6 @@ namespace WebAppPWD.Controllers
 
         #endregion
 
-
         #region Details
         public IActionResult Details(int id,string name)
         {
@@ -162,5 +172,15 @@ namespace WebAppPWD.Controllers
             //View : DetailsWithVM ,Model EmployeeWurhMsgTempBrchListClrViewModel
         }
         #endregion
+
+        #region Delete
+        public IActionResult Delete(int id)
+        {
+            Employee emp = context.Employees.FirstOrDefault(e => e.Id == id);
+            return View(emp);//view with the same action name ("Delete",emp)
+        }
+        #endregion
+
+
     }
 }

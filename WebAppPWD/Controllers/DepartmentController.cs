@@ -18,6 +18,22 @@ namespace WebAppPWD.Controllers
             List<Department> departmentList = context.Departments.ToList();
             return View("Index",departmentList);//Index ,Model List<department>
         }
+
+        #region Ajax Call action Return Jsno
+        public IActionResult DeptEmpDetails()
+        {
+            List<Department> deptList= context.Departments.ToList();
+            return View("DeptEmpDetails", deptList);
+        }
+        //Department/GetEmpByDeptID?deptid=1
+        public IActionResult GetEmpByDeptID(int deptid)
+        {
+            var employees = context.Employees
+                .Where(e => e.DepartmentId == deptid).Select(e => new {e.Id,e.Name}).ToList();
+            return Json(employees);
+        }
+
+        #endregion
         #region Add
         //action can handel any request get | post
         public IActionResult New()

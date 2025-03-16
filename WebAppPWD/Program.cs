@@ -45,17 +45,28 @@ namespace WebAppPWD
             //css/jqyer/jquery.js
             
             app.UseStaticFiles();//take requet extension change default setting
-            //employee/index
-            app.UseRouting();//send action contoll
+            //map current request with defined route
+            app.UseRouting();//defult middleware
             
             app.UseSession();//<---open session |write |read |close session |Generate id unique
 
             app.UseAuthorization();//prmision for remember
+            #endregion
+            #region Custom Route
+
+            //app.MapControllerRoute("Route1", "{controller=Employee}/{action=Index}/{id?}");
+
+            //app.MapControllerRoute("Route1", "r1/{age:int:range(20,60)}/{name}",
+            //    new {controller="Route" ,action="Method1"});
+
+            //app.MapControllerRoute("Route2", "r2",
+            //    new { controller = "Route", action = "Method2" });
+            #endregion
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            #endregion
+                pattern: "{controller=Employee}/{action=Index}/{id?}");
+            
             app.Run();//application start
         }
     }
