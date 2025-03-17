@@ -1,35 +1,41 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using WebAppPWD.Models;
+using WebAppPWD.Repository;
 
 namespace WebAppPWD.Controllers
 {
     //Statesless
     public class DepartmentController : Controller
     {
-        ITIContext context = new ITIContext();
+       // ITIContext context = new ITIContext();
 
-        public DepartmentController()
+        IDepartmentRespoitory departmentRepository;
+        IEmployeeRepository employeeRepository;
+
+        public DepartmentController(IEmployeeRepository empRepo, IDepartmentRespoitory deptRepo)
         {
-            
+            departmentRepository=deptRepo;//= new DepartmentRepository();
+            employeeRepository=empRepo;//= new EmployeeRepository();
         }
+
         public IActionResult Index()//not numerl function
         {
-            
-            List<Department> departmentList = context.Departments.ToList();
+
+            List<Department> departmentList = departmentRepository.GetAll();
             return View("Index",departmentList);//Index ,Model List<department>
         }
 
         #region Ajax Call action Return Jsno
         public IActionResult DeptEmpDetails()
         {
-            List<Department> deptList= context.Departments.ToList();
+            List<Department> deptList= departmentRepository.GetAll();
             return View("DeptEmpDetails", deptList);
         }
         //Department/GetEmpByDeptID?deptid=1
         public IActionResult GetEmpByDeptID(int deptid)
         {
-            var employees = context.Employees
-                .Where(e => e.DepartmentId == deptid).Select(e => new {e.Id,e.Name}).ToList();
+            var employees = employeeRepository.GetByDeptID(deptid)
+                .Select(e => new {e.Id,e.Name}).ToList();
             return Json(employees);
         }
 
@@ -54,8 +60,8 @@ namespace WebAppPWD.Controllers
             */
             if (deptReqquest.Name != null)
             {//0
-                context.Departments.Add(deptReqquest);
-                context.SaveChanges();//identity              
+                departmentRepository.Insert(deptReqquest);
+                departmentRepository.Save();           
                 return RedirectToAction("Index", "Department");
             }
             return View("New", deptReqquest);//
@@ -69,7 +75,7 @@ namespace WebAppPWD.Controllers
         //department/details?id=20
         public IActionResult Details(int id)
         {
-            Department dept=context.Departments.FirstOrDefault(d=>d.Id==id);
+            Department dept = departmentRepository.GetById(id);
             if(dept==null)
             {
                 return NotFound();

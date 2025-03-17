@@ -7,6 +7,15 @@ namespace WebAppPWD.Models
         //Class ==< Table 
         public DbSet<Employee> Employees { get; set; }
         public DbSet<Department> Departments { get; set; }
+        public ITIContext()//
+        {
+            
+        }
+      
+        public ITIContext(DbContextOptions<ITIContext> options):base(options)
+        {
+            
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

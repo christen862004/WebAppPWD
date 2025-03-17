@@ -1,3 +1,7 @@
+using Microsoft.EntityFrameworkCore;
+using WebAppPWD.Models;
+using WebAppPWD.Repository;
+
 namespace WebAppPWD
 {
     public class Program
@@ -10,13 +14,28 @@ namespace WebAppPWD
             // Add services to the container.
             builder.Services.AddControllersWithViews();
 
-
             builder.Services.AddSession(option =>
             {
                 option.IdleTimeout = TimeSpan.FromMinutes(30);
             });
 
+            builder.Services.AddDbContext<ITIContext>(Contextbuilder =>
+            {
+                Contextbuilder.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
+            });
 
+            //add custom service
+            builder.Services.AddScoped<IDepartmentRespoitory, DepartmentRepository>();
+            builder.Services.AddScoped<IEmployeeRepository,EmployeeRepository>();
+           // builder.Services.AddScoped<IEmployeeRepository,EmpFromMemeoryReposiotory>();
+
+
+           
+
+
+
+
+            //------------------------------
             var app = builder.Build();
             # region inline Midelware "Cutom With no name"
             //app.Use(async (httpContext, next) => {

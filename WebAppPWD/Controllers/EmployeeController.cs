@@ -1,17 +1,29 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Reflection.Metadata.Ecma335;
 using WebAppPWD.Models;
+using WebAppPWD.Repository;
 using WebAppPWD.ViewModel;
 
 namespace WebAppPWD.Controllers
 {
     public class EmployeeController : Controller
     {
-        ITIContext context = new ITIContext();
+        //DIP
+        IEmployeeRepository EmployeeRepository;
+        IDepartmentRespoitory DepartmentRepository;//=new DepartmentRepository();
+        //Injection DI
+        public EmployeeController(IDepartmentRespoitory depRepo,IEmployeeRepository empRepo)
+        {
+            // EmployeeRepository = new EmployeeRepository();
+            // DepartmentRepository = new DepartmentRepository();
+            EmployeeRepository = empRepo;
+            DepartmentRepository = depRepo;
+        }
+
 
         public IActionResult Index()
         {
-            List<Employee> empsList = context.Employees.ToList();
+            List<Employee> empsList = EmployeeRepository.GetAll();
             return View("Index", empsList);//Model List<Employee>
         }
 
@@ -20,7 +32,7 @@ namespace WebAppPWD.Controllers
         //Employee/GetEmpCard/1
         public IActionResult GetEmpCard(int id)
         {
-            Employee emp = context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee emp = EmployeeRepository.GetById(id);
             return PartialView("_EmpCard",emp);//Model null
         }
 
@@ -48,7 +60,7 @@ namespace WebAppPWD.Controllers
         #region Add
         public IActionResult New()
         {
-            ViewData["deptList"] = context.Departments.ToList();
+            ViewData["deptList"] = DepartmentRepository.GetAll();
             return View("New");
         }
 
@@ -57,12 +69,12 @@ namespace WebAppPWD.Controllers
         //handl only internal requet
         public IActionResult SaveNew(Employee empFromRequest) {
            
-            if(ModelState.IsValid==true)
+           if(ModelState.IsValid==true)
             {
                 try
                 {
-                    context.Employees.Add(empFromRequest);
-                    context.SaveChanges();
+                    EmployeeRepository.Insert(empFromRequest);
+                    EmployeeRepository.Save();
                     return RedirectToAction("Index");
                 }catch(Exception ex)
                 {
@@ -72,7 +84,7 @@ namespace WebAppPWD.Controllers
                 }
             }
            
-            ViewData["deptList"] = context.Departments.ToList();
+            ViewData["deptList"] = DepartmentRepository.GetAll();
             return View("New", empFromRequest);//go To View with name "NEw"  Model with type Employee
 
         }
@@ -84,8 +96,8 @@ namespace WebAppPWD.Controllers
         public IActionResult Edit(int id)
         {
             //Get Data
-            Employee EmpModel= context.Employees.FirstOrDefault(e=>e.Id==id);
-            List<Department> DeptList=context.Departments.ToList();
+            Employee EmpModel= EmployeeRepository.GetById(id);
+            List<Department> DeptList=DepartmentRepository.GetAll();
 
             //DEcalre ViewModl
             EmpWithDEptListViewModel empVM =   new EmpWithDEptListViewModel();
@@ -109,7 +121,7 @@ namespace WebAppPWD.Controllers
             if(empFromReq.Name!=null && empFromReq.Salary > 6000)
             {
                 //get old ref
-                Employee empFromDB=context.Employees.FirstOrDefault(e=>e.Id== empFromReq.Id);
+                Employee empFromDB=EmployeeRepository.GetById(empFromReq.Id);
                 //change value
                 empFromDB.Name=empFromReq.Name;
                 empFromDB.Address=empFromReq.Address;
@@ -118,10 +130,10 @@ namespace WebAppPWD.Controllers
                 empFromDB.JobTitle=empFromReq.JobTitle;
                 empFromDB.ImageURL=empFromReq.ImageURL;
                 //save Cah
-                context.SaveChanges();
+                EmployeeRepository.Save();
                 return RedirectToAction("Index");
             }
-            empFromReq.DepartmentList = context.Departments.ToList();
+            empFromReq.DepartmentList = DepartmentRepository.GetAll();
 
             return View("Edit", empFromReq);
         }
@@ -143,7 +155,7 @@ namespace WebAppPWD.Controllers
             ViewBag.CLR = "Blue";
 
 
-            Employee EmpModel= context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee EmpModel = EmployeeRepository.GetById(id);//context.Employees.FirstOrDefault(e => e.Id == id);
             return View("Details",EmpModel); //View 'Details' ,Model Employee
         }
 
@@ -154,7 +166,7 @@ namespace WebAppPWD.Controllers
             int temp = 28;
             List<string> brches = new List<string>() { "Assiut", "Alex", "Menia", "Cario" };
             string color = "red";
-            Employee EmpModel = context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee EmpModel = EmployeeRepository.GetById(id);//context.Employees.FirstOrDefault(e => e.Id == id);
             //declare object from ViewModel
             EmployeeWurhMsgTempBrchListClrViewModel empViewModel = 
                 new EmployeeWurhMsgTempBrchListClrViewModel();
@@ -176,7 +188,7 @@ namespace WebAppPWD.Controllers
         #region Delete
         public IActionResult Delete(int id)
         {
-            Employee emp = context.Employees.FirstOrDefault(e => e.Id == id);
+            Employee emp = EmployeeRepository.GetById(id);
             return View(emp);//view with the same action name ("Delete",emp)
         }
         #endregion
