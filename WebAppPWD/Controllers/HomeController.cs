@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebAppPWD.Models;
@@ -10,7 +11,7 @@ namespace WebAppPWD.Controllers
         2) Inherit Class Contoller
 
      */
-
+ 
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -89,7 +90,6 @@ namespace WebAppPWD.Controllers
         {
             _logger = logger;
         }
-
         public IActionResult Index()
         {
             return View();
@@ -100,8 +100,8 @@ namespace WebAppPWD.Controllers
             return View();
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        [ResponseCache(Duration = 1000, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error(int id)
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }

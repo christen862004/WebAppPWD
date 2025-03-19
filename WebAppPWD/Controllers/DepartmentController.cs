@@ -1,10 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using WebAppPWD.Models;
 using WebAppPWD.Repository;
 
 namespace WebAppPWD.Controllers
 {
     //Statesless
+    //[Authorize]
+    //[AllowAnonymous]
     public class DepartmentController : Controller
     {
        // ITIContext context = new ITIContext();
@@ -18,6 +22,8 @@ namespace WebAppPWD.Controllers
             employeeRepository=empRepo;//= new EmployeeRepository();
         }
 
+        //[AllowAnonymous]
+        [Authorize]
         public IActionResult Index()//not numerl function
         {
 
@@ -50,8 +56,10 @@ namespace WebAppPWD.Controllers
 
         //Department/SaveNew? Name = &ManagerName =
         [HttpPost]
+        
         public IActionResult SaveNew(Department deptReqquest)//string Name,string ManagerName)
         {
+            //IActionFilter
             /*
             //if (Request.Method == "POST")
             //{

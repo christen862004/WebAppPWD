@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using WebAppPWD.Filtters;
 using WebAppPWD.Models;
 
 namespace WebAppPWD.Controllers
 {
+    
+
     public class BindController : Controller
     {
         //prmitive int ,string ..

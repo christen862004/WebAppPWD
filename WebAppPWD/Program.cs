@@ -1,4 +1,6 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using WebAppPWD.Filtters;
 using WebAppPWD.Models;
 using WebAppPWD.Repository;
 
@@ -13,6 +15,8 @@ namespace WebAppPWD
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+                //options => options.Filters.Add(new HandelErrorAttribute())
+                //);
 
             builder.Services.AddSession(option =>
             {
@@ -23,6 +27,16 @@ namespace WebAppPWD
             {
                 Contextbuilder.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
             });
+          
+            builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+
+
+            })
+                .AddEntityFrameworkStores<ITIContext>();
+
 
             //add custom service
             builder.Services.AddScoped<IDepartmentRespoitory, DepartmentRepository>();
